@@ -6,11 +6,11 @@ from .api import views as api_views
 from django.conf import settings
 
 router = routers.DefaultRouter()
-router.register(r'reports', api_views.ReportViewSet)
-router.register(r'report', api_views.ReportNestedViewSet)
-router.register(r'formats', api_views.FormatViewSet)
-router.register(r'filterfields', api_views.FilterFieldViewSet)
-router.register(r'contenttypes', api_views.ContentTypeViewSet)
+router.register(r'reports', api_views.ReportViewSet, basename="reporter-reports")
+router.register(r'report', api_views.ReportNestedViewSet, basename="reporter-report")
+router.register(r'formats', api_views.FormatViewSet, basename="reporter-formats")
+router.register(r'filterfields', api_views.FilterFieldViewSet, basename="reporter-filterfields")
+router.register(r'contenttypes', api_views.ContentTypeViewSet, basename="reporter-contenttypes")
 
 urlpatterns = [
     re_path(r'^report/(?P<pk>\d+)/download_file/$', views.DownloadFileView.as_view(), name="report_download_file"),
@@ -21,7 +21,7 @@ urlpatterns = [
     re_path(r'^export_to_report/$', views.ExportToReport.as_view(), name="export_to_report"),
     re_path(r'^api/', include(router.urls)),
     re_path(r'^api/config/', api_views.ConfigView.as_view()),
-    re_path(r'^api/api-auth/', include('rest_framework.re_paths', namespace='rest_framework')),
+    re_path(r'^api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^api/related_fields', staff_member_required(api_views.RelatedFieldsView.as_view()), name="related_fields"),
     re_path(r'^api/fields', staff_member_required(api_views.FieldsView.as_view()), name="fields"),
     re_path(r'^api/report/(?P<report_id>\w+)/generate/', staff_member_required(api_views.GenerateReport.as_view()), name="generate_report"),
